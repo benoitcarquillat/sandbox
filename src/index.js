@@ -10,6 +10,11 @@ import 'sanitize.css';
 import 'sanitize.css/typography.css';
 import 'sanitize.css/forms.css';
 
+import Home from './containers/home';
+import Header from 'components/Header';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import AppProvider from 'containers/AppProvider';
+
 const GlobalStyles = createGlobalStyle`
   body {
     color: ${({ theme }) => theme.text}
@@ -21,8 +26,17 @@ ReactDOM.render(
   <React.StrictMode>
     <Suspense fallback={<div />}>
       <MargaretProvider theme={theme}>
-        <GlobalStyles />
-        <App />
+        <AppProvider>
+          <BrowserRouter>
+            <Header />
+            <GlobalStyles />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<App />} />
+              <Route path="*" element={<App />} />
+            </Routes>
+          </BrowserRouter>
+        </AppProvider>
       </MargaretProvider>
     </Suspense>
   </React.StrictMode>,
