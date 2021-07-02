@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container, Stack } from '@tymate/margaret';
 import { fontStyles } from 'ui';
-import { formatDate } from 'utils';
-import logo from 'images/logo.svg';
+import Toys from 'components/Toys';
 
 const Main = styled(Stack)`
   min-height: 90vh;
@@ -11,16 +10,29 @@ const Main = styled(Stack)`
 
 const Title = styled.h1`
   ${fontStyles.h1Mega}
+  color: #20366d;
+`;
+const Subtitle = styled.p`
+  color: #20366d;
+  font-weight: 700;
+`;
+
+const Input = styled.input`
+  border: none;
+  border-bottom: 1px solid;
+  width: 50px;
 `;
 
 const App = () => {
   return (
     <Container>
-      <Main size="full" alignX="center" alignY="center" direction="column">
-        <img src={logo} alt="Tymate" />
-        <Title>SPA Starter pack</Title>
-        <Stack>{formatDate(new Date(), 'dd MMM yyyy')}</Stack>
-      </Main>
+      <Stack direction="column" alignX="center" paddingVertical={2}>
+        <Title> Dimanche 31 octobre 2021 </Title>
+        <Subtitle>
+          Objectif atteint à <Input value={94} /> %
+        </Subtitle>
+      </Stack>
+      <Toys />
     </Container>
   );
 };
