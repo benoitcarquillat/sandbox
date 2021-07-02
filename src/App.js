@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Container, Stack } from '@tymate/margaret';
 import { fontStyles } from 'ui';
@@ -24,15 +24,25 @@ const Input = styled.input`
 `;
 
 const App = () => {
+  const [percentage, setPercentage] = useState(94);
   return (
     <Container>
       <Stack direction="column" alignX="center" paddingVertical={2}>
         <Title> Dimanche 31 octobre 2021 </Title>
         <Subtitle>
-          Objectif atteint à <Input value={94} /> %
+          Objectif atteint à{' '}
+          <Input
+            onChange={e => {
+              setPercentage(e.target.value);
+            }}
+            value={percentage}
+          />
+          %
         </Subtitle>
       </Stack>
-      <Toys />
+      <Stack alignX="center">
+        <Toys percentage={percentage} />
+      </Stack>
     </Container>
   );
 };
