@@ -7,6 +7,10 @@ import {
   Composites,
   Composite,
 } from 'matter-js';
+import box from './icons/box.png';
+import car from './icons/car.png';
+import ball from './icons/ball.png';
+import gift from './icons/gift.png';
 
 function Toys({ percentage }) {
   const scene = useRef();
@@ -55,36 +59,62 @@ function Toys({ percentage }) {
   useEffect(() => {
     const stack = Composites.stack(20, 20, 10, 5, 0, 0, function (x, y) {
       var sides = Math.round(Common.random(1, 8));
-
-      // triangles can be a little unstable, so avoid until fixed
-      sides = sides === 3 ? 4 : sides;
-      switch (Math.round(Common.random(0, 1))) {
-        case 0:
-          if (Common.random() < 0.8) {
-            return Bodies.rectangle(
-              x,
-              y,
-              Common.random(25, 50),
-              Common.random(25, 50),
-              //   { chamfer: chamfer }, // ? radius
-            );
-          } else {
-            return Bodies.rectangle(
-              x,
-              y,
-              Common.random(80, 120),
-              Common.random(25, 30),
-              //   { chamfer: chamfer },
-            );
-          }
-        case 1:
-          return Bodies.polygon(x, y, sides, Common.random(25, 50), {
-            // chamfer: chamfer,
-          });
-        default:
-          return Bodies.polygon(x, y, sides, Common.random(25, 50), {
-            // chamfer: chamfer,
-          });
+      const random = Math.round(Common.random(0, 10));
+      if (random < 3) {
+        return Bodies.rectangle(
+          x,
+          y,
+          Common.random(25, 50),
+          Common.random(25, 50),
+          {
+            render: {
+              strokeStyle: '#ffffff',
+              sprite: {
+                texture: box,
+              },
+            },
+          },
+        );
+      } else if (random < 6) {
+        return Bodies.rectangle(
+          x,
+          y,
+          Common.random(80, 120),
+          Common.random(25, 30),
+          {
+            render: {
+              strokeStyle: '#ffffff',
+              sprite: {
+                texture: car,
+              },
+            },
+          },
+        );
+      } else if (random < 8) {
+        return Bodies.rectangle(
+          x,
+          y,
+          Common.random(80, 120),
+          Common.random(25, 30),
+          {
+            render: {
+              strokeStyle: '#ffffff',
+              sprite: {
+                texture: gift,
+              },
+            },
+          },
+        );
+      } else {
+        console.log('else');
+        return Bodies.polygon(x, y, sides, Common.random(25, 50), {
+          render: {
+            strokeStyle: '#ffffff',
+            sprite: {
+              texture: ball,
+            },
+          },
+        });
       }
     });
     Composite.add(engine.current.world, [stack]);
