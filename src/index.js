@@ -11,6 +11,7 @@ import 'sanitize.css/typography.css';
 import 'sanitize.css/forms.css';
 
 import Home from './containers/home';
+import PathDraw from './containers/PathDraw';
 import Header from 'components/Header';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AppProvider from 'containers/AppProvider';
@@ -31,7 +32,7 @@ ReactDOM.render(
             <Header />
             <GlobalStyles />
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<PathDraw />} />
               <Route path="/contact" element={<App />} />
               <Route path="*" element={<App />} />
             </Routes>

@@ -1,0 +1,22 @@
+
+.fixed_wrapper {
+    position: relative;
+    overflow: hidden;
+    height: 818px;
+}
+
+.fixed_target {
+    bottom: -100vh;
+}
+.fixed,
+.fixed_target {
+    position: absolute;
+    top: -100vh;
+    right: 0;
+    left: 0;
+}
+.fixed {
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+}
