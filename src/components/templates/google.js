@@ -24,7 +24,7 @@ const dash = keyframes`
 const Loader = styled.div`
   position: relative;
   margin: 0 auto;
-  width: 64px; // !todo
+  width: 64px;
   &:before {
     content: '';
     display: block;
