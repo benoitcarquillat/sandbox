@@ -1,6 +1,6 @@
 import { Stack } from '@tymate/margaret';
 import styled, { css } from 'styled-components';
-import { GoogleSpinner } from './templates';
+import { GoogleSpinner, IosSpinner } from './templates';
 
 const Wrapper = styled(Stack).attrs({
   alignX: 'center',
@@ -60,9 +60,12 @@ const Wrapper = styled(Stack).attrs({
 
 const Spinner = ({ animation, variant, size }) => {
   return (
-    <Wrapper variant={variant} size={size}>
-      <GoogleSpinner size={64} />
-    </Wrapper>
+    <>
+      <Wrapper variant={variant} size={size}>
+        <GoogleSpinner size={64} />
+      </Wrapper>
+      <IosSpinner size={64} />
+    </>
   );
 };
 
