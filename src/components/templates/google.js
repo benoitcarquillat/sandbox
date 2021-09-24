@@ -73,12 +73,14 @@ const Showbox = styled.div`
 
 export const GoogleSpinner = ({ size }) => {
   return (
-    <Showbox>
-      <Loader size={size}>
-        <Circular viewBox="25 25 50 50">
-          <Circle cx="50" cy="50" r="20" />
-        </Circular>
-      </Loader>
-    </Showbox>
+    <div style={{ position: 'relative' }}>
+      <Showbox>
+        <Loader size={size}>
+          <Circular viewBox="25 25 50 50">
+            <Circle cx="50" cy="50" r="20" />
+          </Circular>
+        </Loader>
+      </Showbox>
+    </div>
   );
 };

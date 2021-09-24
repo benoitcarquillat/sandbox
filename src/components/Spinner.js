@@ -4,9 +4,9 @@ import { GoogleSpinner, IosSpinner } from './templates';
 
 const Wrapper = styled(Stack).attrs({
   alignX: 'center',
-  alignY: 'center',
 })`
   min-height: ${({ size }) => (Boolean(size) ? undefined : '120px')};
+  background: lightGray;
   transform: scale(
     calc(${({ size }) => size || 64} / 64),
     calc(${({ size }) => size || 64} / 64)
@@ -61,10 +61,14 @@ const Wrapper = styled(Stack).attrs({
 const Spinner = ({ animation, variant, size }) => {
   return (
     <>
+      Google
       <Wrapper variant={variant} size={size}>
         <GoogleSpinner size={64} />
       </Wrapper>
-      <IosSpinner size={64} />
+      IOS
+      <Wrapper>
+        <IosSpinner size={64} />
+      </Wrapper>
     </>
   );
 };
