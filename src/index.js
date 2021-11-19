@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 import 'sanitize.css';
 import 'sanitize.css/typography.css';
 import 'sanitize.css/forms.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const GlobalStyles = createGlobalStyle`
   body {
@@ -22,6 +23,12 @@ ReactDOM.render(
     <Suspense fallback={<div />}>
       <MargaretProvider theme={theme}>
         <GlobalStyles />
+        <Router>
+          <Routes>
+            <Route path="/*" element={<App />} />
+            {/* <Route path="/context" element={<Auth />} /> */}
+          </Routes>
+        </Router>
         <App />
       </MargaretProvider>
     </Suspense>

@@ -2,26 +2,38 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container, Stack } from '@tymate/margaret';
 import { fontStyles } from 'ui';
-import { formatDate } from 'utils';
-import logo from 'images/logo.svg';
+import Header from 'components/Header';
+import Card from 'components/Card';
+import { useEffect } from 'react/cjs/react.development';
+import EventBus, { actions } from 'utils/Evenbus';
 
 const Main = styled(Stack)`
   min-height: 90vh;
 `;
 
 const Title = styled.h1`
-  ${fontStyles.h1Mega}
+  ${fontStyles.h1}
 `;
 
 const App = () => {
+  useEffect(() => {
+    EventBus.on(actions.ADD_PRODUCT, payload => {
+      console.log('app:', payload);
+    });
+  }, []);
+
   return (
-    <Container>
-      <Main size="full" alignX="center" alignY="center" direction="column">
-        <img src={logo} alt="Tymate" />
-        <Title>SPA Starter pack</Title>
-        <Stack>{formatDate(new Date(), 'dd MMM yyyy')}</Stack>
-      </Main>
-    </Container>
+    <Stack direction="column" size="full" gutterSize={2}>
+      <Header />
+      <Container>
+        <Title> Eviter le Props forage (drilling) </Title>
+        <Stack marginTop={2}>
+          <div style={{ flexBasis: '33.33%' }}>
+            <Card />
+          </div>
+        </Stack>
+      </Container>
+    </Stack>
   );
 };
 

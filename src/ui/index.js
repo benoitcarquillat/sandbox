@@ -6,7 +6,7 @@ export const theme = {
   text: 'rgba(0, 0, 0, 0.87)',
   textLight: 'rgba(0, 0, 0, 0.6)',
 
-  primary: '#41D974',
+  primary: '#204ecf',
 
   fonts: {
     title:
