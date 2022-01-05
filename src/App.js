@@ -1,58 +1,40 @@
-import React, { useRef } from 'react';
-import { useEffect } from 'react/cjs/react.development';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import React, { useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+
+function Box(props) {
+  // This reference will give us direct access to the mesh
+  const mesh = useRef();
+  // Set up state for the hovered and active state
+  const [hovered, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+  // Subscribe this component to the render-loop, rotate the mesh every frame
+  useFrame((state, delta) => (mesh.current.rotation.x += 0.01));
+  return (
+    <mesh
+      {...props}
+      ref={mesh}
+      scale={active ? 1.5 : 2}
+      onClick={event => setActive(!active)}
+      onPointerOver={event => setHover(true)}
+      onPointerOut={event => setHover(false)}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
+    </mesh>
+  );
+}
 
 const App = () => {
-  const sceneRef = useRef();
-  const renderer = new THREE.WebGLRenderer();
-  const scene = new THREE.Scene();
+  return (
+    <Canvas style={{ height: '100vh' }}>
+      <ambientLight intensity={0.5} />
+      <directionalLight color="red" position={[0, -2, 0]} />
 
-  // on initialise la camera que l’on place ensuite sur la scène
-  const camera = new THREE.PerspectiveCamera(
-    50,
-    window.innerWidth / window.innerHeight,
-    1,
-    10000,
+      <pointLight position={[10, 10, 10]} />
+      <Box position={[-2, 0, 0]} />
+      <Box position={[2, 0, 0]} />
+    </Canvas>
   );
-
-  // on créé un  cube au quel on définie un matériau puis on l’ajoute à la scène
-  const geometry = new THREE.BoxGeometry(200, 200, 200);
-  const material = new THREE.MeshBasicMaterial({
-    color: 0xffffff,
-    wireframe: true,
-  });
-  const mesh = new THREE.Mesh(geometry, material);
-  const controls = new OrbitControls(camera, renderer.domElement);
-
-  const animate = () => {
-    controls.update();
-    requestAnimationFrame(animate);
-    mesh.rotation.x += 0.001;
-    mesh.rotation.y += 0.002;
-    renderer.render(scene, camera);
-  };
-
-  useEffect(() => {
-    // Set scene on init
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    sceneRef?.current.appendChild(renderer.domElement);
-
-    // add camera
-    camera.position.set(0, 0, 1000);
-    scene.add(camera);
-
-    // add geometry
-    scene.add(mesh);
-
-    // on effectue le rendu de la scène
-    renderer.render(scene, camera);
-
-    // Run animation
-    animate();
-  });
-
-  return <div ref={sceneRef} id="container"></div>;
 };
 
 export default App;
