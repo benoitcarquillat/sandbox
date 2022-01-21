@@ -1,117 +1,63 @@
-import React, { useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useRef } from 'react';
 import { Container, Stack } from '@tymate/margaret';
-import { fontStyles } from 'ui';
 import { useEffect } from 'react/cjs/react.development';
-import { fromEvent, of } from 'rxjs';
-import {
-  debounceTime,
-  map,
-  tap,
-  distinctUntilChanged,
-  filter,
-  switchMap,
-  catchError,
-} from 'rxjs/operators';
-import { ajax } from 'rxjs/ajax';
+import { fromEvent, merge } from 'rxjs';
+import { debounceTime, map, tap, filter, buffer } from 'rxjs/operators';
+import styled from 'styled-components';
 
-const Main = styled(Stack)`
-  min-height: 90vh;
-  max-width: 600px;
-  margin: 0 auto;
-`;
-
-const Title = styled.h1`
-  ${fontStyles.h1Mega}
-`;
-
-const Input = styled.input`
-  padding: 10px 20px;
-  width: 100%;
-`;
-
-const Card = styled.div`
-  border: 1px solid #dedede;
-  border-radius: 5px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  margin-top: ${({ theme }) => theme.spacing(2)};
-  padding: ${({ theme }) => theme.spacing()};
-  width: 100%;
-  max-height: 500px;
-  overflow: scroll;
+const Button = styled.button`
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 10px 50px;
 `;
 
 const App = () => {
-  const api = value => `https://pokeapi.co/api/v2/pokemon/${value}`;
-  const inputRef = useRef();
-  const [name, setName] = useState('');
-  const [result, setResult] = useState('');
+  const prev = useRef();
+  const next = useRef();
 
   useEffect(() => {
-    fromEvent(inputRef.current, 'keyup')
-      .pipe(
-        map(e => e?.target?.value.toLowerCase()),
-        debounceTime(500),
-        distinctUntilChanged(),
-        tap(value => setName(value)),
-        filter(name => name.length > 0),
+    const keyUp$ = fromEvent(document, 'keyup');
+    const prev$ = fromEvent(prev.current, 'click');
+    const next$ = fromEvent(next.current, 'click');
 
-        // ? each emission the previous inner observable (the result of the function you supplied)
-        // ? is cancelled and the new observable is subscribed
-        switchMap(name =>
-          ajax.getJSON(api(name)).pipe(catchError(e => of(null))),
-        ),
+    const ArrowLeft$ = keyUp$.pipe(filter(e => e.keyCode === 37));
+    const ArrowRight$ = keyUp$.pipe(filter(e => e.keyCode === 39));
+
+    const clickKeyPrev$ = merge(ArrowLeft$, prev$);
+    const clickKeyNext$ = merge(ArrowRight$, next$);
+
+    // click or key press
+    clickKeyPrev$.pipe(tap(_ => console.log('prev'))).subscribe();
+
+    // ---------------------------------- NEXT BUTTON ------------------------------------------------------//
+    clickKeyNext$
+      .pipe(
+        buffer(clickKeyNext$.pipe(debounceTime(250))),
+        map(e => e.length),
+        filter(clicksLength => clicksLength >= 2),
       )
-      .subscribe(setResult);
+      .subscribe(console.log);
   }, []);
 
   return (
-    <Container>
-      <Main size="full" alignX="center" alignY="center" direction="column">
-        <Stack
-          direction="column"
-          gutterSize={1}
-          size="full"
-          paddingBottom={2}
-          style={{ borderBottom: '1px solid #dedede' }}
-        >
-          <Title>Mon debounce</Title>
-          <Input ref={inputRef} name="name" placeholder="Your name" />
-          <div>
-            Bonjour <b>{name}</b>
+    <div style={{ backgroundColor: '#7badff', height: '100vh' }}>
+      <Container>
+        <img
+          src="https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/1bc1ec37816529.574d926d09a38.png"
+          alt=""
+          style={{ maxWidth: '100%' }}
+        />
+        <Stack gutterSize={1} marginTop={4}>
+          <div ref={prev} variant="primary">
+            <Button>Précédent</Button>
+          </div>
+          <div ref={next} variant="secondary">
+            <Button>Suivant</Button>
           </div>
         </Stack>
-
-        <hr />
-
-        {Boolean(result?.sprites?.front_shiny) && (
-          <>
-            <Card>
-              <Stack direction="column" gutterSize={0.5} alignX="center">
-                <Stack alignY="center" gutterSize={1}>
-                  <h3>Abra Kadabra! </h3>
-                  <img
-                    style={{ width: 30 }}
-                    src="https://www.pokepedia.fr/images/3/36/Abra-RFVF.png"
-                    alt="pokemon"
-                  />
-                </Stack>
-                <Stack>
-                  <img src={result?.sprites?.front_default} alt="pokemon" />
-                  <img src={result?.sprites?.front_shiny} alt="pokemon" />
-                </Stack>
-              </Stack>
-
-              <ol>
-                {(result?.moves ?? []).map(({ move }, index) => (
-                  <li> {move?.name}</li>
-                ))}
-              </ol>
-            </Card>
-          </>
-        )}
-      </Main>
-    </Container>
+      </Container>
+    </div>
   );
 };
 
