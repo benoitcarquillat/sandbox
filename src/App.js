@@ -35,7 +35,6 @@ const App = () => {
       .pipe(
         buffer(clickKeyNext$.pipe(debounceTime(250))),
         map(e => e.length),
-        filter(clicksLength => clicksLength >= 2),
       )
       .subscribe(console.log);
   }, []);
