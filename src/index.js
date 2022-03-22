@@ -11,9 +11,18 @@ import 'sanitize.css/typography.css';
 import 'sanitize.css/forms.css';
 
 const GlobalStyles = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+
   body {
     color: ${({ theme }) => theme.text}
     ${fontStyles.body}
+  }
+
+  html, body, #root {
+    width: 100%;
+    height: 100%;
   }
 `;
 
